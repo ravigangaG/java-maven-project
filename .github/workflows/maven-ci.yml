@@ -1,0 +1,40 @@
+name: Java Maven CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set Up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Install Dependencies
+      run: mvn install
+
+    - name: Compile Project
+      run: mvn compile
+
+    - name: Run Unit Tests
+      run: mvn test
+
+    - name: Package Application
+      run: mvn package
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: java-build-artifacts
+        path: target/*.jar
